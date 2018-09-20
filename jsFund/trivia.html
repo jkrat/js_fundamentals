@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <style>
+        .flex-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+        .container {
+            margin : 50px auto;
+        }
+        .row {
+            margin: 10px;
+            border: 1px solid black;
+        }
+        .question1, .question2, .question3 {
+            border: 1px solid black;
+            background-color: blue;
+            color: white;
+            width: 30%;
+            height: 300px;
+            margin: 10px;
+            text-align: center;
+            padding: 90px 0px;
+    
+        }
+        ul {
+            list-style: none;
+        }
+    </style>
+</head>
+<body>
+    <div>
+ <div class="flex-container">
+     <button type="button" class="btn btn-success">get more questions</button>
+     <h1>Trivia Night</h1>
+     <h3>300 points</h3>
+ </div>
+ <div>
+
+
+
+        <div class="container">
+            <div id="blocks" class="flex-container">
+     
+            </div>
+            
+        </div>
+
+        
+
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+  
+<script>
+
+var items;
+function makeAjaxCall(url, methodType, callback){
+ $.ajax({
+    url : url,
+    method : methodType,
+    dataType : "json",
+    success : callback,
+    error : function (reason, xhr){
+     console.log("error in processing your request", reason);
+    }
+   });
+ }
+var URL = "https://opentdb.com/api.php?amount=9&difficulty=easy&type=multiple";
+makeAjaxCall(URL, "GET", function(respJson){
+    items = respJson.results;
+    console.log(items);
+    var insert = ""
+    for (var i = 0; i < items.length; i++) {
+        insert += `<div id="go" class='question1 container'><h3>${items[i].category}</h3><p>100</p></div><div class='question2 hide'><h6>${items[i].question}</h6> <ul><li>${items[i].incorrect_answers[1]}</li><li>${items[i].correct_answer}</li><li>${items[i].incorrect_answers[0]}</li><li>${items[i].incorrect_answers[2]}</li></ul></div><div class='question3 hide'><p>${items[i].correct_answer}</p> </div>`; 
+    } 
+    $( "#blocks" ).html(insert);
+});
+
+function wait() {
+    console.log(items);
+}
+
+$(document).on("click", ".question1", function() {
+    console.log("click");
+    console.log(items);
+    $(this).addClass('hide');
+    $(this).next().removeClass('hide');
+});
+
+$(document).on("click", ".question2 ul", function() {
+    console.log("click");
+    $(this).parent().addClass('hide');
+    $(this).parent().next().removeClass('hide');
+});
+
+
+
+
+</script>
+</body>
+</html>
